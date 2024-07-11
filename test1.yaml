@@ -1,0 +1,30 @@
+---
+- hosts: ubuntu
+  remote_user: ubuntu
+  become: true
+  become_method: sudo
+  become_user: root
+
+  tasks:
+  - name: Update and upgrade apt packages
+    become: true
+    apt:
+      upgrade: yes
+      update_cache: yes
+  - name: install apache server   # name of the playwh
+    apt:
+      name: apache2
+      state: present
+  - name: start and enable autostart of apache server
+    systemd:
+      name: apache2
+      state: started
+      enabled: yes
+  - name: Status of apache
+    ansible.builtin.service:
+      name: apache2
+      state: reloaded  
+  - name: Start service httpd, if not started
+    ansible.builtin.service:
+      name: apache2
+      state: started

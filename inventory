@@ -1,0 +1,12 @@
+[amazon-linux]
+13.59.8.241
+3.133.103.196
+3.22.183.156
+[ubuntu]
+13.59.90.67
+18.117.178.89
+3.16.183.109
+[amazon-linux:vars]
+ansible_user=ec2-user
+[ubuntu:vars]
+ansible_user=ubuntu

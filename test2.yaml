@@ -1,0 +1,33 @@
+---
+- hosts: amazon-linux
+  remote_user: ec2-user
+  become: true
+  become_method: sudo
+  become_user: root
+
+  tasks:
+    - name: install aplications   # name of the playwh
+      dnf:
+        name: "{{ item }}"
+        state: latest
+      loop:
+        - httpd
+        # - mssql-server
+        - nodejs
+    - name: Status of aplications
+      ansible.builtin.service:
+        name: "{{ item }}"
+        state: reloaded
+      loop:
+        - httpd
+        - node
+    - name: Start service httpd, if not started
+      ansible.builtin.service:
+        name: "{{ item }}"
+        state: started
+      loop:
+        - httpd
+        # - mssql-server
+
+
+

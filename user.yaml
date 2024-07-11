@@ -1,0 +1,24 @@
+---
+- hosts: amazon-linux
+  remote_user: ec2-user
+  become: yes
+  
+  tasks:
+    - name: creating devs group
+      group:
+        name: devs
+        state: present
+
+    - name: creating don and jake users
+      user:
+        name: "{{ item }}"
+        groups: devs
+        state: present
+      loop:
+        - don
+        - jake
+
+    - name: set shell for jake
+      user:
+        name: jake
+        shell: /bin/bash
