@@ -24,4 +24,5 @@
       lineinfile:
         path: /tmp/names.txt
         line: "{{ last_name }}"
+        insertafter: EOF
 
