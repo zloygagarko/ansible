@@ -1,0 +1,44 @@
+on:
+  push:
+    branches:
+      - main  # Adjust the branch name as needed
+
+jobs:
+  ansible-test:
+    runs-on: ubuntu-latest  # You can choose a different operating system if needed
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8  # Choose a Python version compatible with Ansible
+    
+    - name: Clone ansible
+      uses: GuillaumeFalourd/clone-github-repo-action@v2.3
+      with:
+        depth: 1
+        branch: 'main'
+        owner: 'zloygagarko'
+        repository: 'ansible'
+    
+    - name: Access cloned repo
+      run: |
+         cd ansible
+         ls -la
+
+    - name: Install Ansible
+      run: |
+        pip install ansible
+
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.9.0
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+    
+    
+    - name: Run Ansible Playbook
+      run: |
+        ansible-playbook -i inventory txtfiles.yaml --ssh-common-args='-o StrictHostKeyChecking=no'
